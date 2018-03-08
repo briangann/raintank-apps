@@ -5,7 +5,19 @@ PKG=${1:-"task-server task-agent"}
 
 BASE=$(dirname $0)
 
-CODE_DIR=$(readlink -e "$BASE/../")
+# Detect OS, use readlink/greadlink
+platform='linux'
+unamestr=`uname`
+if [[ "$unamestr" == 'Darwin' ]]; then
+   platform='Darwin'
+fi
+
+READLINK="readlink"
+if [[ $platform == 'Darwin' ]]; then
+   READLINK="greadlink"
+fi
+
+CODE_DIR=$($READLINK -e "$BASE/../")
 
 CURRENT_PWD=$(pwd)
 cd $CODE_DIR
