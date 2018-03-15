@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/intelsdi-x/snap/mgmt/rest/rbody"
+	"github.com/intelsdi-x/snap/mgmt/rest/v1/rbody"
 	"github.com/raintank/raintank-apps/task-agent/snap"
 	"github.com/raintank/raintank-apps/task-server/model"
 	"github.com/raintank/worldping-api/pkg/log"

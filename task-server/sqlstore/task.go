@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/raintank/raintank-apps/task-server/event"
@@ -35,9 +34,6 @@ func getTasks(sess *session, query *model.GetTasksQuery) ([]*model.TaskDTO, erro
 
 	if query.Name != "" {
 		sess.And("task.name like ?", query.Name)
-	}
-	if query.TaskType != "" {
-		sess.And("task.task_type like ?", query.task_type)
 	}
 
 	if query.OrderBy == "" {
@@ -447,9 +443,9 @@ func getAgentTasks(sess *session, agent *model.AgentDTO) ([]*model.TaskDTO, erro
 	rawParams := make([]interface{}, 0)
 	rawParams = append(rawParams, agent.Id, agent.Id)
 
-	q := `SELECT 
+	q := `SELECT
 	           DISTINCT(idx.task_id)
-	        FROM route_by_tag_index AS idx 
+	        FROM route_by_tag_index AS idx
 	        INNER JOIN agent_tag on idx.org_id=agent_tag.org_id and idx.tag = agent_tag.tag
 	        WHERE agent_tag.agent_id = ?`
 	rawParams = append(rawParams, agent.Id, agent.Id)

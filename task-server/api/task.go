@@ -58,18 +58,6 @@ func AddTask(ctx *Context, task model.TaskDTO) {
 		return
 	}
 
-	err = sqlstore.ValidateMetrics(task.OrgId, task.Metrics)
-	if err != nil {
-		ctx.JSON(200, rbody.ErrResp(400, err))
-		return
-	}
-
-	err = sqlstore.ValidateTaskRouteConfig(&task)
-	if err != nil {
-		ctx.JSON(200, rbody.ErrResp(400, err))
-		return
-	}
-
 	err = sqlstore.AddTask(&task)
 	if err != nil {
 		log.Error(3, err.Error())
@@ -91,18 +79,6 @@ func UpdateTask(ctx *Context, task model.TaskDTO) {
 	}
 	if !ok {
 		ctx.JSON(200, rbody.ErrResp(400, fmt.Errorf("invalid route config")))
-		return
-	}
-
-	err = sqlstore.ValidateMetrics(task.OrgId, task.Metrics)
-	if err != nil {
-		ctx.JSON(200, rbody.ErrResp(400, err))
-		return
-	}
-
-	err = sqlstore.ValidateTaskRouteConfig(&task)
-	if err != nil {
-		ctx.JSON(200, rbody.ErrResp(400, err))
 		return
 	}
 

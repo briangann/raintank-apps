@@ -8,7 +8,7 @@ import (
 
 	"github.com/intelsdi-x/snap/core/ctypes"
 	"github.com/intelsdi-x/snap/mgmt/rest/client"
-	"github.com/intelsdi-x/snap/mgmt/rest/rbody"
+	"github.com/intelsdi-x/snap/mgmt/rest/v1/rbody"
 	"github.com/intelsdi-x/snap/scheduler/wmap"
 	"github.com/raintank/raintank-apps/task-server/model"
 	"github.com/raintank/worldping-api/pkg/log"
@@ -149,15 +149,17 @@ func (c *Client) CreateSnapTask(t *model.TaskDTO, name string) (*rbody.Scheduled
 		Interval: fmt.Sprintf("%ds", t.Interval),
 	}
 	wf := wmap.NewWorkflowMap()
-	for ns, ver := range t.Metrics {
-		if err := wf.CollectNode.AddMetric(ns, int(ver)); err != nil {
-			return nil, err
+	/*
+		for ns, ver := range t.Metrics {
+			if err := wf.CollectNode.AddMetric(ns, int(ver)); err != nil {
+				return nil, err
+			}
 		}
-	}
+	*/
 	token := ""
 	for ns, conf := range t.Config {
 		for key, value := range conf {
-			wf.CollectNode.AddConfigItem(ns, key, value)
+			wf.Collect.AddConfigItem(ns, key, value)
 			if key == "token" {
 				token = value.(string)
 			}
@@ -168,7 +170,7 @@ func (c *Client) CreateSnapTask(t *model.TaskDTO, name string) (*rbody.Scheduled
 		t.Interval,
 		token,
 	)
-	if err := wf.CollectNode.Add(publisher); err != nil {
+	if err := wf.Collect.Add(publisher); err != nil {
 		return nil, err
 	}
 
@@ -183,7 +185,7 @@ func (c *Client) CreateSnapTask(t *model.TaskDTO, name string) (*rbody.Scheduled
 
 func getPublisher(orgId, interval int64, token string) *wmap.PublishWorkflowMapNode {
 	return &wmap.PublishWorkflowMapNode{
-		Name: "rt-hostedtsdb",
+		PluginName: "rt-hostedtsdb",
 		Config: map[string]interface{}{
 			"interval": interval,
 			"orgId":    orgId,

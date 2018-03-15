@@ -87,7 +87,6 @@ func getAgents(sess *session, query *model.GetAgentsQuery) ([]*model.AgentDTO, e
 		prefix = "AND"
 	}
 
-
 	if query.Name != "" {
 		fmt.Fprintf(&where, "%s agent.name=? ", prefix)
 		whereArgs = append(whereArgs, query.Name)
@@ -369,7 +368,7 @@ func getAgentsForTask(sess *session, t *model.TaskDTO) ([]int64, error) {
 		if err != nil {
 			return nil, err
 		}
-	case model.RouteByTags:.
+	case model.RouteByTags:
 		tags := make([]string, len(t.Route.Config["tags"].([]string)))
 		for i, tag := range t.Route.Config["tags"].([]string) {
 			tags[i] = tag
