@@ -25,7 +25,7 @@ func GetAgentById(ctx *Context) {
 	owner := ctx.OrgId
 	agent, err := sqlstore.GetAgentById(id, owner)
 	if err == model.AgentNotFound {
-		ctx.JSON(200, rbody.ErrResp(404, fmt.Errorf("agent not found")))
+		ctx.JSON(200, rbody.ErrResp(404, fmt.Errorf("GetAgentById: agent not found")))
 		return
 	}
 	if err != nil {
@@ -39,7 +39,7 @@ func GetAgentById(ctx *Context) {
 
 func AddAgent(ctx *Context, agent model.AgentDTO) {
 	if !agent.ValidName() {
-		ctx.JSON(400, "invalde agent Name. must match /^[0-9a-Z_-]+$/")
+		ctx.JSON(400, "AddAgent: invalid agent Name. must match /^[0-9a-Z_-]+$/")
 		return
 	}
 	agent.Id = 0
@@ -56,11 +56,11 @@ func AddAgent(ctx *Context, agent model.AgentDTO) {
 
 func UpdateAgent(ctx *Context, agent model.AgentDTO) {
 	if !agent.ValidName() {
-		ctx.JSON(200, rbody.ErrResp(400, fmt.Errorf("invalid agent Name. must match /^[0-9a-Z_-]+$/")))
+		ctx.JSON(200, rbody.ErrResp(400, fmt.Errorf("UpdateAgent: invalid agent Name. must match /^[0-9a-Z_-]+$/")))
 		return
 	}
 	if agent.Id == 0 {
-		ctx.JSON(200, rbody.ErrResp(400, fmt.Errorf("agent ID not set.")))
+		ctx.JSON(200, rbody.ErrResp(400, fmt.Errorf("UpdateAgent: agent ID not set.")))
 		return
 	}
 	//need to add suport for middelware context with AUTH/
@@ -80,7 +80,7 @@ func DeleteAgent(ctx *Context) {
 	err := sqlstore.DeleteAgent(id, owner)
 	if err != nil {
 		if err == model.AgentNotFound {
-			ctx.JSON(200, rbody.ErrResp(404, fmt.Errorf("agent not found")))
+			ctx.JSON(200, rbody.ErrResp(404, fmt.Errorf("DeleteAgent: agent not found")))
 			return
 		}
 		log.Error(3, err.Error())

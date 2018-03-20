@@ -1,0 +1,29 @@
+# Creates a task server and task agent
+version: "3.3"
+services:
+  task-server:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-server
+      labels:
+        - "raintank-apps task-server"
+    image: rta-server
+    ports:
+      - "4000:8082"
+    environment:
+     - TERM=linux
+    volumes:
+     - ./example-config/task-server.ini:/etc/raintank/task-server.ini
+  task-agent:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-agent
+      labels:
+        - "raintank-apps task-agent"
+    image: rta-agent
+    depends_on:
+      - task-server
+    environment:
+     - TERM=linux
+    volumes:
+     - ./example-config/task-agent.ini:/etc/raintank/task-agent.ini

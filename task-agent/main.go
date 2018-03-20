@@ -26,8 +26,8 @@ var (
 	logLevel    = flag.Int("log-level", 2, "log level. 0=TRACE|1=DEBUG|2=INFO|3=WARN|4=ERROR|5=CRITICAL|6=FATAL")
 	confFile    = flag.String("config", "/etc/raintank/collector.ini", "configuration file path")
 
-	serverAddr = flag.String("server-url", "ws://localhost:80/api/v1/", "addres of raintank-apps server")
-	tsdbAddr   = flag.String("tsdb-url", "http://localhost:80/", "addres of raintank-apps server")
+	serverAddr = flag.String("server-url", "ws://localhost:80/api/v1/", "address of raintank-apps server")
+	tsdbAddr   = flag.String("tsdb-url", "http://localhost:80/", "address of raintank-apps server")
 	snapUrlStr = flag.String("snap-url", "http://localhost:8181", "url of SNAP server.")
 	nodeName   = flag.String("name", "", "agent-name")
 	apiKey     = flag.String("api-key", "not_very_secret_key", "Api Key")

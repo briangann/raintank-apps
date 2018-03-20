@@ -1,0 +1,36 @@
+# use ubuntu image
+FROM golang:latest
+
+# Update APT
+RUN apt-get update
+RUN apt-get install -y curl
+RUN apt-get install -y apt-utils
+RUN apt-get install -y software-properties-common
+RUN apt-get install -y ruby-full bundler
+# Update bundler to latest
+RUN gem install bundler
+
+# Add git
+RUN apt-get install -y git
+
+#
+ENV HOME /app
+
+RUN find / -name 'go' -print
+RUN mkdir -p /go
+ENV GOROOT="/usr/local/go"
+ENV GOPATH="/go"
+# Build Application
+ADD . /go/src/github.com/raintank/raintank-apps
+WORKDIR /go/src/github.com/raintank/raintank-apps/scripts
+RUN ./deps.sh
+RUN ./build.sh
+
+# Copy the built binaries into /app
+RUN mkdir -p /app
+RUN cp /go/src/github.com/raintank/raintank-apps/build/bin/task-server /app
+RUN cp /go/src/github.com/raintank/raintank-apps/build/bin/task-agent /app
+
+# Run task-server
+WORKDIR /app
+CMD ["./task-agent", "-config", "/etc/raintank/task-agent.ini"]
