@@ -30,7 +30,7 @@ type TaskDTO struct {
 	OrgId    int64                             `json:"orgId"`
 	Config   map[string]map[string]interface{} `json:"config"`
 	Interval int64                             `json:"interval" binding:"Required"`
-	Route    *TaskRoute                        `json:"route" binding:"Required"`
+	Route    *TaskRoute                        `xorm:"JSON" json:"route" binding:"Required"`
 	Enabled  bool                              `json:"enabled"`
 	Created  time.Time                         `json:"created"`
 	Updated  time.Time                         `json:"updated"`
@@ -45,7 +45,7 @@ const (
 )
 
 var (
-	InvalidRouteConfig = errors.New("Invlid route config")
+	InvalidRouteConfig = errors.New("Invalid route config")
 	UnknownRouteType   = errors.New("unknown route type")
 )
 
