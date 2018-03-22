@@ -459,8 +459,11 @@ func getAgentTasks(sess *session, agent *model.AgentDTO) ([]*model.TaskDTO, erro
 	if len(taskIds) == 0 {
 		return nil, nil
 	}
+	log.Info("There are %d tasks", len(taskIds))
+
 	tid := make([]int64, len(taskIds))
 	for i, t := range taskIds {
+		log.Info("Adding TaskID %d to tid array", t.TaskId)
 		tid[i] = t.TaskId
 	}
 	sess.Table("task")
@@ -469,6 +472,7 @@ func getAgentTasks(sess *session, agent *model.AgentDTO) ([]*model.TaskDTO, erro
 	sess.Cols(
 		"`task`.*",
 	)
+	log.Info("Gettings tasks matching id list")
 	err = sess.Find(&tasks)
 	return tasks, err
 }

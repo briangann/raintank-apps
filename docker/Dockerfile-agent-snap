@@ -1,0 +1,12 @@
+# use ubuntu image
+FROM rta-server:latest
+#
+ENV HOME /app
+
+# Copy the built binaries into /app
+RUN mkdir -p /app
+COPY --from=rta-server /app/task-agent /app
+
+# Run task-server
+WORKDIR /app
+CMD ["./task-agent", "-config", "/etc/raintank/task-agent.ini"]

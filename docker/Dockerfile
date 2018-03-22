@@ -1,5 +1,5 @@
 # use ubuntu image
-FROM golang:latest
+FROM golang:latest as rta-builder
 
 # Update APT
 RUN apt-get update
@@ -26,11 +26,14 @@ WORKDIR /go/src/github.com/raintank/raintank-apps/scripts
 RUN ./deps.sh
 RUN ./build.sh
 
+FROM golang:latest
 # Copy the built binaries into /app
 RUN mkdir -p /app
-RUN cp /go/src/github.com/raintank/raintank-apps/build/bin/task-server /app
-RUN cp /go/src/github.com/raintank/raintank-apps/build/bin/task-agent /app
+COPY --from=rta-builder /go/src/github.com/raintank/raintank-apps/build/bin/task-server /app
+COPY --from=rta-builder /go/src/github.com/raintank/raintank-apps/build/bin/task-agent /app
+COPY --from=rta-builder /go/src/github.com/raintank/raintank-apps/build/bin/task-agent-ng /app
 
+EXPOSE 8082
 # Run task-server
 WORKDIR /app
-CMD ["./task-agent", "-config", "/etc/raintank/task-agent.ini"]
+CMD ["./task-server", "-config", "/etc/raintank/task-server.ini"]

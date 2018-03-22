@@ -41,9 +41,10 @@ git checkout e7bb4b8ce29fb7beaf0765acda602bc516a56dd5
 cd $GOPATH/src/github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
 go get -t ./...
 
+#go get github.com/go-xorm/xorm
 cd $GOPATH/src/github.com/go-xorm/xorm
-git checkout v0.5.4
-
+git checkout v0.5.6
+#git checkout 9bf34c31890cb518c714bedfec324cdfaacc4cf7
 
 cd $BASE
-bundle install
+#bundle install
